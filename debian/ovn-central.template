@@ -1,5 +1,16 @@
 # This is a POSIX shell fragment                -*- sh -*-
 
-# OVN_CTL_OPTS: Extra options to pass to ovs-ctl.  This is, for example,
-# a suitable place to specify --ovn-northd-wrapper=valgrind.
+# OVN_CTL_OPTS: Extra options to pass to ovn-ctl.  This is, for example,
+# a suitable place to specify --ovn-northd-wrapper=valgrind, or to configure
+# clustered OVSDB connection strings for ovn-northd:
+#
+#   OVN_CTL_OPTS="--db-nb-addr=tcp:NB1:6641,tcp:NB2:6641,tcp:NB3:6641 \
+#                 --db-sb-addr=tcp:SB1:6642,tcp:SB2:6642,tcp:SB3:6642"
+#
 # OVN_CTL_OPTS=
+
+# OVN_IC_CTL_OPTS: Extra options for the ovn-ic daemon.
+# OVN_IC_CTL_OPTS=
+
+# OVN_IC_DB_CTL_OPTS: Extra options for the ovn-ic-db OVSDB servers.
+# OVN_IC_DB_CTL_OPTS=

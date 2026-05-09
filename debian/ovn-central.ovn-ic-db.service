@@ -1,0 +1,20 @@
+# See ovn-ic(8) for details about the OVN IC database servers.
+#
+# Customize by placing options in /etc/default/ovn-central, e.g.:
+#   OVN_IC_DB_CTL_OPTS="--db-ic-nb-create-insecure-remote=yes"
+
+[Unit]
+Description=OVN global (IC) northbound and southbound OVSDB servers
+Documentation=man:ovn-ic(8)
+After=syslog.target network.target
+
+[Service]
+Type=oneshot
+RemainAfterExit=yes
+EnvironmentFile=-/etc/default/ovn-central
+ExecStartPre=-/bin/chown -R root /var/lib/ovn
+ExecStart=/usr/share/ovn/scripts/ovn-ctl start_ic_ovsdb $OVN_IC_DB_CTL_OPTS
+ExecStop=/usr/share/ovn/scripts/ovn-ctl stop_ic_ovsdb $OVN_IC_DB_CTL_OPTS
+
+[Install]
+WantedBy=multi-user.target

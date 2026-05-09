@@ -1,0 +1,22 @@
+# See ovn-controller(8) for details about ovn-controller.
+#
+# Customize by placing options in /etc/default/ovn-host, e.g.:
+#   OVN_CTL_OPTS="--ovn-controller-log=-vconsole:emer -vsyslog:err -vfile:info"
+
+[Unit]
+Description=OVN controller daemon
+Documentation=man:ovn-controller(8)
+After=syslog.target network.target
+Requires=openvswitch-switch.service
+After=openvswitch-switch.service
+
+[Service]
+Type=oneshot
+RemainAfterExit=yes
+EnvironmentFile=-/etc/default/ovn-host
+ExecStart=/usr/share/ovn/scripts/ovn-ctl start_controller $OVN_CTL_OPTS
+ExecStop=/usr/share/ovn/scripts/ovn-ctl stop_controller $OVN_CTL_OPTS
+ExecReload=/usr/share/ovn/scripts/ovn-ctl restart_controller $OVN_CTL_OPTS
+
+[Install]
+WantedBy=multi-user.target

@@ -22,7 +22,7 @@ PARALLEL =
 endif
 
 %:
-	dh $@ --with autoreconf,python3 --parallel
+	dh $@ --with autoreconf,python3,systemd --parallel
 
 # use --as-needed only if supported by dh-autoreconf (to simplify backporting)
 DH_AS_NEEDED=$(shell dpkg --compare-versions $$(dpkg --status dh-autoreconf | grep Version | cut -d' ' -f2) ge 6 && echo --as-needed)
@@ -62,6 +62,12 @@ override_dh_install-indep:
 
 override_dh_installinit:
 	dh_installinit -R
+
+override_dh_installsystemd:
+	dh_installsystemd -povn-central --name=ovn-northd --no-restart-on-upgrade
+	dh_installsystemd -povn-central --name=ovn-ic --no-restart-on-upgrade
+	dh_installsystemd -povn-central --name=ovn-ic-db --no-restart-on-upgrade
+	dh_installsystemd -povn-host --name=ovn-controller --no-restart-on-upgrade
 
 override_dh_strip:
 	dh_strip

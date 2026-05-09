@@ -1,0 +1,19 @@
+# See ovn-ic(8) for details about ovn-ic.
+#
+# Customize by placing options in /etc/default/ovn-central, e.g.:
+#   OVN_IC_CTL_OPTS="--db-ic-nb-addr=... --db-ic-sb-addr=..."
+
+[Unit]
+Description=OVN IC (Interconnect) management daemon
+Documentation=man:ovn-ic(8)
+After=syslog.target network.target
+
+[Service]
+Type=oneshot
+RemainAfterExit=yes
+EnvironmentFile=-/etc/default/ovn-central
+ExecStart=/usr/share/ovn/scripts/ovn-ctl start_ic $OVN_IC_CTL_OPTS
+ExecStop=/usr/share/ovn/scripts/ovn-ctl stop_ic $OVN_IC_CTL_OPTS
+
+[Install]
+WantedBy=multi-user.target

@@ -1,0 +1,24 @@
+# See ovn-northd(8) for details about ovn-northd.
+#
+# Customize by placing options in /etc/default/ovn-central, e.g.:
+#   OVN_CTL_OPTS="--ovn-northd-log=-vconsole:emer -vsyslog:err -vfile:info"
+#
+# For cluster deployments, pass DB connection strings via OVN_CTL_OPTS:
+#   OVN_CTL_OPTS="--db-nb-addr=<NB_ADDR> --db-sb-addr=<SB_ADDR>"
+
+[Unit]
+Description=OVN northd management daemon
+Documentation=man:ovn-northd(8)
+After=syslog.target network.target
+
+[Service]
+Type=oneshot
+RemainAfterExit=yes
+EnvironmentFile=-/etc/default/ovn-central
+ExecStartPre=-/bin/chown -R root /var/lib/ovn
+ExecStart=/usr/share/ovn/scripts/ovn-ctl start_northd $OVN_CTL_OPTS
+ExecStop=/usr/share/ovn/scripts/ovn-ctl stop_northd $OVN_CTL_OPTS
+ExecReload=/usr/share/ovn/scripts/ovn-ctl restart_northd $OVN_CTL_OPTS
+
+[Install]
+WantedBy=multi-user.target
